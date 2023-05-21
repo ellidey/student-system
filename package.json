@@ -1,5 +1,5 @@
 {
-  "author": "N4D - Толя сидельцев",
+  "author": "N4D - Толя сидельцев <admin@mail.com>",
   "dependencies": {
     "@electron/remote": "^1.1.0",
     "bulma-calendar": "^6.1.19",
