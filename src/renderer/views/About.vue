@@ -6,19 +6,16 @@
         <div class="media-content">
           <div class="content">
             <div>
-              <h2 class="subtitle is-6">Developed By:</h2>
-              <strong>Muhammad Ubaid Raza</strong>
+              <h2 class="subtitle is-5 mb-1">Программа разработана:</h2>
+              N4D - Толя Сидельцев
               <br />
-              <a href="//github.com/mubaidr" target="_blank"
-                >mubaidr@gmail.com</a
-              >
             </div>
           </div>
         </div>
       </article>
     </div>
 
-    <h2 class="subtitle is-4">System Information</h2>
+    <h2 class="subtitle is-4">Системная информация</h2>
     <SystemInformation />
     <br />
   </div>

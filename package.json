@@ -1,18 +1,17 @@
 {
-  "author": "Muhammad Ubaid Raza <mubaidr@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/mubaidr/vue-electron-template/issues"
-  },
+  "author": "N4D - Толя сидельцев",
   "dependencies": {
     "@electron/remote": "^1.1.0",
+    "bulma-calendar": "^6.1.19",
     "bulma-fluent": "^0.4.3",
     "material-design-icons": "^3.0.1",
     "vue": "^2.6.12",
+    "vue-cal": "^3.11.0",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
   },
-  "description": "An electron-vue project",
+  "description": "Система отслеживания посещаемости",
   "devDependencies": {
     "@babel/core": "^7.13.15",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -59,7 +58,7 @@
     "typescript": "^4.2.4",
     "url-loader": "^4.1.1",
     "vue-eslint-parser": "^7.6.0",
-    "vue-loader": "^15.9.6",
+    "vue-loader": "^15.10.1",
     "vue-style-loader": "^4.1.3",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.31.2",
@@ -68,9 +67,9 @@
   },
   "license": "MIT",
   "main": "./dist/main.js",
-  "name": "vue-electron-template",
+  "name": "student-system",
   "private": true,
-  "productName": "Vue Electron Template",
+  "productName": "Посещаемость",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mubaidr/vue-electron-template.git"

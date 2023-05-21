@@ -3,13 +3,13 @@
     <table class="table is-fullwidth">
       <thead>
         <tr>
-          <th>Package</th>
-          <th>Version</th>
+          <th>Пакет</th>
+          <th>Версия</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Platform</td>
+          <td>Платформа</td>
           <td>{{ platform }}</td>
         </tr>
         <tr v-for="lib in Object.keys(versions)" :key="lib">

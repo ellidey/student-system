@@ -40,7 +40,9 @@ if (!isDev) {
 
 async function installDevTools() {
   let installExtension = require('electron-devtools-installer')
-  installExtension.default(installExtension.VUEJS_DEVTOOLS).catch((err) => {
+  installExtension.default(installExtension.VUEJS_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => {
     console.log('Unable to install `vue-devtools`: \n', err)
   })
 }
@@ -55,6 +57,7 @@ function createWindow() {
     height: 540,
     minWidth: 960,
     minHeight: 540,
+    devTools: true,
     // useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
@@ -67,6 +70,17 @@ function createWindow() {
 
   // eslint-disable-next-line
   setMenu()
+
+  if (isDev) {
+    installDevTools()
+    const devtools = new BrowserWindow()
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
+  }
+
+  if (isDebug) {
+    mainWindow.webContents.openDevTools()
+  }
 
   // load root file/url
   if (isDev) {
@@ -92,15 +106,6 @@ function createWindow() {
 
 app.on('ready', () => {
   createWindow()
-
-  if (isDev) {
-    installDevTools()
-    mainWindow.webContents.openDevTools()
-  }
-
-  if (isDebug) {
-    mainWindow.webContents.openDevTools()
-  }
 })
 
 app.on('window-all-closed', () => {
@@ -141,27 +146,28 @@ const sendMenuEvent = async (data) => {
 
 const template = [
   {
-    label: app.name,
+    label: 'Программа',
     submenu: [
       {
-        label: 'Home',
+        label: 'Главная',
         accelerator: 'CommandOrControl+H',
         click() {
           sendMenuEvent({ route: '/' })
         },
       },
       { type: 'separator' },
-      { role: 'minimize' },
-      { role: 'togglefullscreen' },
+      { role: 'minimize', label: 'свернуть' },
+      { role: 'togglefullscreen', label: 'полный экран' },
       { type: 'separator' },
-      { role: 'quit', accelerator: 'Alt+F4' },
+      { role: 'quit', accelerator: 'Alt+F4', label: 'Выход' },
     ],
   },
   {
     role: 'help',
+    label: 'Помощь',
     submenu: [
       {
-        label: 'Get Help',
+        label: 'Информация',
         role: 'help',
         accelerator: 'F1',
         click() {
@@ -169,7 +175,7 @@ const template = [
         },
       },
       {
-        label: 'About',
+        label: 'О программе',
         role: 'about',
         accelerator: 'CommandOrControl+A',
         click() {

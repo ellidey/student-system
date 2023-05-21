@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import About from '../views/About.vue'
 import Help from '../views/Help.vue'
-import Home from '../views/Home.vue'
+import Home from '../views/Schedule.vue'
+import Students from '../views/Students.vue'
 
 Vue.use(Router)
 
@@ -10,20 +11,28 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/schedule',
     },
     {
-      path: '/home',
+      path: '/schedule',
       meta: {
-        title: 'Home',
+        title: 'Расписание',
         icon: 'fa-home',
       },
       component: Home,
     },
     {
+      path: '/students',
+      meta: {
+        title: 'Студенты',
+        icon: 'fa-home',
+      },
+      component: Students,
+    },
+    {
       path: '/about',
       meta: {
-        title: 'About',
+        title: 'О программе',
         icon: 'fa-info-circle',
       },
       component: About,
@@ -31,14 +40,14 @@ const router = new Router({
     {
       path: '/help',
       meta: {
-        title: 'Help',
+        title: 'Информация',
         icon: 'fa-info-circle',
       },
       component: Help,
     },
     {
       path: '*',
-      redirect: '/home',
+      redirect: '/schedule',
     },
   ],
 })
