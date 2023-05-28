@@ -1,8 +1,10 @@
 <script>
 import Vue from 'vue'
+import Popper from 'vue-popperjs';
 
 export default Vue.extend({
   name: 'Students',
+  components: { Popper },
   data: function () {
     return {
       students: [
@@ -77,8 +79,28 @@ export default Vue.extend({
           <td>{{ student.group }}</td>
           <td>{{ student.parent }}</td>
           <td>
-            <button class="button is-primary">Редактировать</button>
-            <button class="button is-danger">Удалить</button>
+            <popper
+              trigger="focus"
+              :options="{
+                placement: 'bottom',
+                modifiers: { offset: { offset: '0,5px' } }
+              }">
+              <div class="popper">
+                <button>
+                  <i class="ri-pencil-line"></i>
+                  Редактировать
+                </button>
+
+                <button>
+                  <i class="ri-delete-bin-7-line"></i>
+                  Удалить
+                </button>
+              </div>
+
+              <button slot="reference" class="btn more">
+                <i class="ri-more-2-line"></i>
+              </button>
+            </popper>
           </td>
         </tr>
         </tbody>
@@ -86,6 +108,3 @@ export default Vue.extend({
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>

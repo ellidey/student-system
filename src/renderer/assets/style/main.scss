@@ -50,3 +50,77 @@ span + .material-icons {
 ::-webkit-scrollbar-thumb {
   background: #666666;
 }
+
+.schedule {
+  height: 100%;
+  position: relative;
+}
+
+.schedule__datepicker {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  z-index: 99;
+}
+
+.schedule__dates {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.schedule__today {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 99;
+}
+
+.vuecal__view-btn {
+  color: #FFFFFF !important;
+}
+
+
+.btn.more {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: bold;
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    color: #42afb9;
+  }
+}
+
+.popper {
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(66, 175, 185, 1) !important;
+  border: none !important;
+  flex-direction: column !important;
+
+  button {
+    border: none;
+    padding: 10px 20px;
+    background: transparent;
+    color: #FFFFFF;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.popper__arrow {
+  border-color: transparent transparent rgba(66, 175, 185, 0.7) transparent !important;
+}

@@ -1,23 +1,40 @@
 <template>
-  <div style="height: 100%;">
-    <vue-cal :disable-views="['years']"
-             :time="false"
-             active-view="year" locale="ru"
-             :events="events"
-    />
-  </div>
+    <div class="schedule">
+      <date-picker
+        v-model="selectedDate"
+        class="schedule__datepicker"
+        format="DD.MM.YYYY"
+        value-type="date"
+        @input="$refs.cal.switchView('day')"
+      />
+
+      <button class="schedule__today button" @click="$refs.cal.switchView('day', new Date())">Сегодня</button>
+
+      <vue-cal :disable-views="['years', 'week']"
+               class="schedule__dates"
+               ref="cal"
+               :selected-date="selectedDate"
+               :time="false"
+               active-view="year" locale="ru"
+               :events="events"
+      />
+    </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/locale/ru';
 
 export default Vue.extend({
   name: 'Schedule',
-  components: { VueCal },
+  components: { VueCal, DatePicker },
   data: function () {
     return {
+      activeView: 'day',
+      selectedDate: new Date(),
       events: [
         {
           start: '2023-05-22',
@@ -44,9 +61,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    handleDayChanged(day) {
-      console.log(day);
-    }
   }
 })
 </script>

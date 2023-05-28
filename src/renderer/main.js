@@ -3,8 +3,13 @@ import 'bulma-calendar/dist/css/bulma-calendar.min.css'
 import 'material-design-icons/iconfont/material-icons.css'
 import Vue from 'vue'
 import App from './App.vue'
+
 import './assets/style/animations.scss'
 import './assets/style/main.scss'
+import 'vue2-datepicker/index.css';
+import 'vue-popperjs/dist/vue-popper.css';
+import 'remixicon/fonts/remixicon.css';
+
 import router from './router/index'
 import store from './store/index'
 
