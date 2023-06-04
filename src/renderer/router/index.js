@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import About from '../views/About.vue'
 import Help from '../views/Help.vue'
 import Home from '../views/Schedule.vue'
-import Students from '../views/Students.vue'
+import StudentIndex from '../views/students/StudentIndex.vue'
+import StudentAdd from '../views/students/StudentAdd.vue'
+import StudentEdit from '../views/students/StudentEdit.vue'
 
 Vue.use(Router)
 
@@ -27,7 +29,23 @@ const router = new Router({
         title: 'Студенты',
         icon: 'fa-home',
       },
-      component: Students,
+      component: StudentIndex,
+    },
+    {
+      path: '/students/add',
+      meta: {
+        title: 'Добавление студентов',
+        icon: 'fa-home',
+      },
+      component: StudentAdd,
+    },
+    {
+      path: '/students/:id/edit',
+      meta: {
+        title: 'Редактирование студента',
+        icon: 'fa-home',
+      },
+      component: StudentEdit,
     },
     {
       path: '/about',

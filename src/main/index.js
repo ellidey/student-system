@@ -2,7 +2,6 @@ import { app, BrowserWindow, Menu } from 'electron'
 import pkg from '../../package.json'
 
 require('@electron/remote/main').initialize()
-
 // set app name
 app.name = pkg.productName
 // to hide deprecation message
@@ -15,6 +14,9 @@ const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
 const isDebug = process.argv.includes('--debug')
 let mainWindow
+
+const Store = require('electron-store');
+Store.initRenderer();
 
 // only allow single instance of application
 if (!isDev) {

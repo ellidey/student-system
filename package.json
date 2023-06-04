@@ -4,6 +4,7 @@
     "@electron/remote": "^1.1.0",
     "bulma-calendar": "^6.1.19",
     "bulma-fluent": "^0.4.3",
+    "electron-store": "^8.1.0",
     "material-design-icons": "^3.0.1",
     "remixicon": "^3.3.0",
     "vue": "^2.6.12",
