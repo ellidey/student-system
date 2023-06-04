@@ -28,7 +28,14 @@ export default Vue.extend({
         Добавить
       </router-link>
 
-      <table class="table is-fullwidth">
+      <article class="message is-success mt-4" v-if="getStudents.length === 0">
+        <div class="message-body">
+          <b>Студенты не найдены</b><br>
+          Пожалуйста, добавьте группы в систему
+        </div>
+      </article>
+
+      <table class="table is-fullwidth" v-else>
         <thead>
         <tr>
           <th>ФИО</th>
@@ -42,7 +49,7 @@ export default Vue.extend({
         <tr v-for="student in getStudents" :key="student.id">
           <td>{{ student.name }}</td>
           <td>{{ student.age }}</td>
-          <td>{{ student.group }}</td>
+          <td>{{ $store.getters.getGroup(student.group_id)?.name || 'Неизвестно' }}</td>
           <td>{{ student.parent }}</td>
           <td>
             <popper

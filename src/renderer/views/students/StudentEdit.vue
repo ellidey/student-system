@@ -1,6 +1,6 @@
 <script>
 import Vue from 'vue'
-import { mapMutations } from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default Vue.extend({
   name: 'StudentAdd',
@@ -10,11 +10,14 @@ export default Vue.extend({
       errors: {}
     }
   },
+  computed: {
+    ...mapGetters(['getGroups']),
+  },
   mounted() {
-   this.student = this.$store.getters.getStudent(this.$route.params.id);
+   this.student = { ...this.$store.getters.getStudent(this.$route.params.id) ?? {} };
   },
   methods: {
-    ...mapMutations(['addStudent']),
+    ...mapMutations(['updateStudent']),
     save() {
       this.errors = {};
       if (!this.student.name) {
@@ -30,11 +33,11 @@ export default Vue.extend({
         this.errors.parent = 'Введите ФИО родителя студента';
       }
 
-      if (this.errors.length > 0) {
+      if (Object.keys(this.errors).length > 0) {
         return;
       }
 
-      this.addStudent(this.student);
+      this.updateStudent(this.student);
       this.$router.push('/students');
     }
   }
@@ -58,7 +61,14 @@ export default Vue.extend({
 
       <div class="mb-5">
         <label class="label">Группа</label>
-        <input class="input" type="text" placeholder="Введите группу студента" v-model="student.group_id">
+        <div class="select is-small">
+          <select v-model="student.group_id">
+            <option selected value="">Выберите группу</option>
+            <option v-for="group in getGroups" :key="group.id" :value="group.id">
+              {{ group.name }}
+            </option>
+          </select>
+        </div>
         <p class="help is-danger" v-if="errors.group_id">{{ errors.group_id }}</p>
       </div>
 

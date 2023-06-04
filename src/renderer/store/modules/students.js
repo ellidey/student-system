@@ -10,9 +10,20 @@ export default {
     },
 
     deleteStudent(state, id) {
-      console.log('delete ' + id)
       state.students = state.students.filter(student => {
         return student.id !== id;
+      });
+
+      store.set('students', state.students);
+    },
+
+    updateStudent(state, student) {
+      state.students = state.students.map(st => {
+        if (st.id === student.id) {
+          return { ...student };
+        }
+
+        return st;
       });
 
       store.set('students', state.students);

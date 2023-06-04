@@ -7,6 +7,10 @@ import StudentIndex from '../views/students/StudentIndex.vue'
 import StudentAdd from '../views/students/StudentAdd.vue'
 import StudentEdit from '../views/students/StudentEdit.vue'
 
+import GroupIndex from '../views/groups/GroupIndex.vue'
+import GroupAdd from '../views/groups/GroupAdd.vue'
+import GroupEdit from '../views/groups/GroupEdit.vue'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -46,6 +50,30 @@ const router = new Router({
         icon: 'fa-home',
       },
       component: StudentEdit,
+    },
+    {
+      path: '/groups',
+      meta: {
+        title: 'Группы',
+        icon: 'fa-home',
+      },
+      component: GroupIndex,
+    },
+    {
+      path: '/groups/add',
+      meta: {
+        title: 'Добавление студентов',
+        icon: 'fa-home',
+      },
+      component: GroupAdd,
+    },
+    {
+      path: '/groups/:id/edit',
+      meta: {
+        title: 'Редактирование студента',
+        icon: 'fa-home',
+      },
+      component: GroupEdit,
     },
     {
       path: '/about',

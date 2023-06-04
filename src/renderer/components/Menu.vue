@@ -30,6 +30,11 @@ export default Vue.extend({
         </router-link>
       </li>
       <li>
+        <router-link to="/groups" :class="{ 'is-active': $route.path === '/groups' }">
+          Группы
+        </router-link>
+      </li>
+      <li>
         <router-link to="/schedule">
           Пары
         </router-link>
