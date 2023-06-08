@@ -60,7 +60,7 @@ export default Vue.extend({
         <label class="label">Группа</label>
         <div class="select is-small">
           <select v-model="student.group_id">
-            <option selected value="">Выберите группу</option>
+            <option disabled selected value="">Выберите группу</option>
             <option v-for="group in getGroups" :key="group.id" :value="group.id">
               {{ group.name }}
             </option>

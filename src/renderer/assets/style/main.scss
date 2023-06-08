@@ -60,7 +60,7 @@ span + .material-icons {
   position: absolute;
   top: 6px;
   left: 10px;
-  z-index: 99;
+  z-index: 9;
 }
 
 .schedule__dates {
@@ -74,7 +74,7 @@ span + .material-icons {
   position: absolute;
   top: 5px;
   right: 10px;
-  z-index: 99;
+  z-index: 9;
 }
 
 .vuecal__view-btn {
@@ -123,4 +123,20 @@ span + .material-icons {
 
 .popper__arrow {
   border-color: transparent transparent rgba(66, 175, 185, 0.7) transparent !important;
+}
+
+.vuecal__event-title {
+  font-weight: bold;
+  margin: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #FFFFFF;
+  font-size: 20px;
+}
+
+.vuecal__event.leisure {
+  border: none;
+  box-shadow: 3px 3px 5px 3px rgba(0, 0, 0, 0.09);
+  background: rgba(66, 175, 185, 0.02);
+  display: block;
+  text-align: left;
 }

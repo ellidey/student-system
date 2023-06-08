@@ -11,6 +11,10 @@ import GroupIndex from '../views/groups/GroupIndex.vue'
 import GroupAdd from '../views/groups/GroupAdd.vue'
 import GroupEdit from '../views/groups/GroupEdit.vue'
 
+import CouplesIndex from '../views/couples/CouplesIndex.vue'
+import CouplesAdd from '../views/couples/CouplesAdd.vue'
+import CouplesEdit from '../views/couples/CouplesEdit.vue'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -74,6 +78,30 @@ const router = new Router({
         icon: 'fa-home',
       },
       component: GroupEdit,
+    },
+    {
+      path: '/couples',
+      meta: {
+        title: 'Пары',
+        icon: 'fa-home',
+      },
+      component: CouplesIndex,
+    },
+    {
+      path: '/couples/add',
+      meta: {
+        title: 'Добавление пары',
+        icon: 'fa-home',
+      },
+      component: CouplesAdd,
+    },
+    {
+      path: '/couples/:id/edit',
+      meta: {
+        title: 'Редактирование пары',
+        icon: 'fa-home',
+      },
+      component: CouplesEdit,
     },
     {
       path: '/about',

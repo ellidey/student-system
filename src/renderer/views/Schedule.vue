@@ -7,7 +7,6 @@
         value-type="date"
         @input="$refs.cal.switchView('day')"
       />
-
       <button class="schedule__today button" @click="$refs.cal.switchView('day', new Date())">Сегодня</button>
 
       <vue-cal :disable-views="['years', 'week']"
@@ -16,8 +15,68 @@
                :selected-date="selectedDate"
                :time="false"
                active-view="year" locale="ru"
-               :events="events"
-      />
+               :events="getEvents"
+      >
+        <template #event="{ event, view }">
+            <div class="my-4" style="text-align: center">
+              <h2>{{ event.title }}</h2>
+            </div>
+          <div class="columns m-2">
+            <router-link tag="button"
+                         :to="`/couples/${event.couple.id}/edit`"
+                         class="button is-success is-small">
+              <i class="ri-edit-2-fill"></i>
+            </router-link>
+            <button tag="button"
+                         @click="deleteCouple(event.couple.id)"
+                         class="button is-danger is-small ml-2">
+              <i class="ri-delete-bin-2-fill"></i>
+            </button>
+          </div>
+
+          <article class="message is-success mt-4" v-if="event.couple.students.length === 0">
+            <div class="message-body">
+              <b>Студенты не найдены</b><br>
+              Похоже, все были на паре
+            </div>
+          </article>
+
+          <table class="table is-fullwidth mt-4" v-else>
+            <thead>
+              <tr>
+                <th>Студент</th>
+                <th>причина пропуска</th>
+                <th>Группа</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="student in event.couple.students" :key="student.student_id">
+                <td>{{ getStudent(student.student_id)?.name ?? 'Неизвестно' }}</td>
+                <td>{{ student.reason }}</td>
+                <td>{{ getGroup(event.couple.group_id)?.name ?? 'Неизвестно' }}</td>
+                <td>
+                  <button v-if="student.file" @click="image = student.file" class="button is-small is-primary">
+                      <span class="icon is-small">
+                        <i class="ri-eye-2-fill"></i>
+                      </span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+      </vue-cal>
+
+      <div class="modal" :class="{ 'is-active': !!image }">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+          <p class="image is-4by3">
+            <img :src="image" alt="">
+          </p>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="image = null"></button>
+      </div>
     </div>
 </template>
 
@@ -27,40 +86,40 @@ import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/locale/ru';
+import {mapGetters, mapMutations} from "vuex";
 
 export default Vue.extend({
   name: 'Schedule',
   components: { VueCal, DatePicker },
+  computed: {
+    ...mapGetters(['getGroup', 'getStudent', 'getCouples']),
+    getEvents() {
+      const events = [];
+      this.getCouples.forEach(couple => {
+        try {
+          events.push({
+            'start': new Date(couple.date),
+            'end': new Date(couple.date),
+            'title': couple.name,
+            'couple': couple,
+            class: 'leisure'
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      });
+      return events;
+    }
+  },
   data: function () {
     return {
       activeView: 'day',
       selectedDate: new Date(),
-      events: [
-        {
-          start: '2023-05-22',
-          end: '2023-05-22',
-          title: 'Пара по праву',
-          content: 'Группа ИСиП-19',
-          class: 'leisure'
-        },
-        {
-          start: '2023-05-22',
-          end: '2023-05-22',
-          title: 'Пара по географии',
-          content: 'Группа ИСиП-22',
-          class: 'leisure'
-        },
-        {
-          start: '2023-05-23',
-          end: '2023-05-23',
-          title: 'Пара по чему-то',
-          content: 'Группа ИСиП-10',
-          class: 'leisure'
-        },
-      ]
+      image: null,
     }
   },
   methods: {
+    ...mapMutations(['deleteCouple']),
   }
 })
 </script>

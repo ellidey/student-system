@@ -35,7 +35,7 @@ export default Vue.extend({
         </router-link>
       </li>
       <li>
-        <router-link to="/schedule">
+        <router-link to="/couples">
           Пары
         </router-link>
       </li>
