@@ -1,4 +1,6 @@
 <template>
+  <div style="height: 85vh">
+    <h1>Расписание занятий</h1>
     <div class="schedule">
       <date-picker
         v-model="selectedDate"
@@ -18,66 +20,106 @@
                :events="getEvents"
       >
         <template #event="{ event, view }">
-            <div class="my-4" style="text-align: center">
-              <h2>{{ event.title }}</h2>
+          <div class="my-4" style="text-align: center">
+            <div>
+              <select class="schedule__group-select" v-model="group_id" style="height: 35px;">
+                <option selected disabled value="">Выберите группу</option>
+                <option v-for="group in getGroupsByDate(event.start)" :key="group.id" :value="group.id">
+                  {{ group.name }}
+                </option>
+              </select>
             </div>
-          <div class="columns m-2">
-            <router-link tag="button"
-                         :to="`/couples/${event.couple.id}/edit`"
-                         class="button is-success is-small">
-              <i class="ri-edit-2-fill"></i>
-            </router-link>
-            <button tag="button"
-                         @click="deleteCouple(event.couple.id)"
-                         class="button is-danger is-small ml-2">
-              <i class="ri-delete-bin-2-fill"></i>
-            </button>
           </div>
 
-          <article class="message is-success mt-4" v-if="event.couple.students.length === 0">
+          <article class="message is-success mt-4" v-if="!group_id">
             <div class="message-body">
               <b>Студенты не найдены</b><br>
-              Похоже, все были на паре
+              Выберите группу
+            </div>
+          </article>
+
+          <article class="message is-success mt-4" v-else-if="getStudentsByGroup().length === 0">
+            <div class="message-body">
+              <b>Студенты не найдены</b><br>
+              У этой группы нет студентов
             </div>
           </article>
 
           <table class="table is-fullwidth mt-4" v-else>
             <thead>
-              <tr>
-                <th>Студент</th>
-                <th>причина пропуска</th>
-                <th>Группа</th>
-                <th></th>
-              </tr>
+            <tr>
+              <th>Студент</th>
+              <th v-for="couple in getCouplesByDate(event.start)" :key="couple.id">
+                {{ couple.name }}
+              </th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="student in event.couple.students" :key="student.student_id">
-                <td>{{ getStudent(student.student_id)?.name ?? 'Неизвестно' }}</td>
-                <td>{{ student.reason }}</td>
-                <td>{{ getGroup(event.couple.group_id)?.name ?? 'Неизвестно' }}</td>
-                <td>
-                  <button v-if="student.file" @click="image = student.file" class="button is-small is-primary">
-                      <span class="icon is-small">
-                        <i class="ri-eye-2-fill"></i>
+            <tr v-for="student in getStudentsByGroup()" :key="student.student_id">
+              <td>{{ student.name ?? 'Неизвестно' }}</td>
+              <td v-for="couple in getCouplesByDate(event.start)" :key="couple.id">
+                <div style="display: flex; gap: 3px;">
+                  <select @change="updateSkipStatus(event.start, student, couple, $event)"
+                          class="schedule__select-form"
+                  >
+                    <option value="1">-</option>
+                    <option :selected="isSkipStatus(event.start, student, couple, '2')" value="2">Б</option>
+                    <option :selected="isSkipStatus(event.start, student, couple, '3')" value="3">У</option>
+                    <option :selected="isSkipStatus(event.start, student, couple, '4')" value="4">НБ</option>
+                  </select>
+
+                  <div v-if="getSkipFile(event.start, student, couple)">
+                    <button class="button is_small is-success"
+                            @click="openImage(event.start, student, couple)"
+                            style="
+                                height: 23px;
+                                min-width: auto;
+                                max-width: 20px;
+                                padding: 0 12px;
+                            "
+                    >
+                      <i class="ri-eye-2-fill"></i>
+                    </button>
+                  </div>
+
+                  <div class="file is-small" v-else>
+                    <label class="file-label">
+                      <input class="file-input"
+                             type="file" accept="image/*"
+                             @change="updateSkipFile(event.start, student, couple, $event)"
+                      >
+                      <span class="file-cta">
+                      <span class="">
+                        <i class="ri-file-upload-fill"></i>
                       </span>
-                  </button>
-                </td>
-              </tr>
+                    </span>
+                    </label>
+                  </div>
+                </div>
+              </td>
+<!--              <td>-->
+<!--                <button v-if="student.file" @click="image = student.file" class="button is-small is-primary">-->
+<!--                      <span class="icon is-small">-->
+<!--                        <i class="ri-eye-2-fill"></i>-->
+<!--                      </span>-->
+<!--                </button>-->
+<!--              </td>-->
+            </tr>
             </tbody>
           </table>
         </template>
       </vue-cal>
 
-      <div class="modal" :class="{ 'is-active': !!image }">
+      <div class="modal" :class="{ 'is-active': !!selectSkip }">
         <div class="modal-background"></div>
         <div class="modal-content">
-          <p class="image is-4by3">
-            <img :src="image" alt="">
-          </p>
+          <img :src="selectSkip?.file" alt="">
         </div>
-        <button class="modal-close is-large" aria-label="close" @click="image = null"></button>
+        <button class="modal-close is-large" aria-label="close" @click="selectSkip = null"></button>
+        <button class="button mt-4 is-danger" @click="delete selectSkip.file; updateSkips(skips); selectSkip = null">Удалить</button>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -87,23 +129,34 @@ import 'vue-cal/dist/vuecal.css'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/locale/ru';
 import {mapGetters, mapMutations} from "vuex";
+import GroupAdd from "./groups/GroupAdd.vue";
 
 export default Vue.extend({
   name: 'Schedule',
-  components: { VueCal, DatePicker },
+  components: { GroupAdd, VueCal, DatePicker },
   computed: {
-    ...mapGetters(['getGroup', 'getStudent', 'getCouples']),
+    ...mapGetters(['getGroup', 'getStudent', 'getCouples', 'getGroups', 'getStudents', 'getSkips']),
     getEvents() {
       const events = [];
+      const dates = [];
       this.getCouples.forEach(couple => {
         try {
+          const date = new Date(couple.date);
+          const key = date.toLocaleDateString('ru-RU');
+
+          if (dates.includes(key)) {
+            return;
+          }
+
           events.push({
-            'start': new Date(couple.date),
-            'end': new Date(couple.date),
+            'start': date,
+            'end': date,
             'title': couple.name,
             'couple': couple,
             class: 'leisure'
           });
+
+          dates.push(key);
         } catch (error) {
           console.log(error);
         }
@@ -115,11 +168,122 @@ export default Vue.extend({
     return {
       activeView: 'day',
       selectedDate: new Date(),
-      image: null,
+      selectSkip: null,
+      group_id: null,
+      skips: {},
     }
   },
+  mounted() {
+    this.skips = { ...this.getSkips };
+  },
   methods: {
-    ...mapMutations(['deleteCouple']),
+    ...mapMutations(['deleteCouple', 'updateSkips']),
+    getStudentsByGroup() {
+      const result = [];
+      return this.getStudents.filter(std => {
+        return std.group_id === this.group_id;
+      });
+    },
+    getGroupsByDate(date) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      const groups = [];
+      this.getCouples.filter(couple => {
+        if (new Date(couple.date).toLocaleDateString('ru-RU') === key) {
+          const group = this.getGroup(couple.group_id);
+          if (!groups.includes(group)) {
+            groups.push(group);
+          }
+        }
+      });
+
+      return groups;
+    },
+    getCouplesByDate(date) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      return this.getCouples.filter(couple => {
+        return new Date(couple.date).toLocaleDateString('ru-RU') === key &&
+          couple.group_id === this.group_id;
+      });
+    },
+    updateSkipStatus(date, student, couple, event) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      if (!this.skips[key]) {
+        this.skips[key] = {};
+      }
+
+      if (!this.skips[key][student.id]) {
+        this.skips[key][student.id] = {};
+      }
+
+      if (!this.skips[key][student.id][couple.id]) {
+        this.skips[key][student.id][couple.id] = {};
+      }
+
+      this.skips[key][student.id][couple.id].status = event.target.options[event.target.selectedIndex].value;
+      this.updateSkips(this.skips);
+    },
+    updateSkipFile(date, student, couple, event) {
+      const files = event.target.files || event.dataTransfer.files;
+      if (!files.length) {
+        return;
+      }
+
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      if (!this.skips[key]) {
+        this.skips[key] = {};
+      }
+
+      if (!this.skips[key][student.id]) {
+        this.skips[key][student.id] = {};
+      }
+
+      if (!this.skips[key][student.id][couple.id]) {
+        this.skips[key][student.id][couple.id] = {};
+      }
+
+      this.createImage(files[0], this.skips[key][student.id][couple.id]);
+    },
+    createImage(file, skip) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        skip.file = e.target.result;
+        this.updateSkips(this.skips);
+        this.$forceUpdate();
+      };
+
+      reader.readAsDataURL(file);
+    },
+    isSkipStatus(date, student, couple, status) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      if (!this.skips[key] || !this.skips[key][student.id] || !this.skips[key][student.id][couple.id]) {
+        return false;
+      }
+
+      if (this.skips[key][student.id][couple.id].status === status) {
+        return true;
+      }
+
+      return false;
+    },
+    getSkipFile(date, student, couple) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      if (!this.skips[key] || !this.skips[key][student.id]
+        || !this.skips[key][student.id][couple.id] || !this.skips[key][student.id][couple.id].file) {
+        return false;
+      }
+
+      return this.skips[key][student.id][couple.id].file;
+    },
+    openImage(date, student, couple) {
+      const key = new Date(date).toLocaleDateString('ru-RU');
+      if (!this.skips[key] || !this.skips[key][student.id]
+        || !this.skips[key][student.id][couple.id] || !this.skips[key][student.id][couple.id].file) {
+        return false;
+      }
+
+      this.selectSkip = this.skips[key][student.id][couple.id];
+    }
   }
 })
 </script>

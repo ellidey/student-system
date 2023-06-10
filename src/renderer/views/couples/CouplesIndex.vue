@@ -30,6 +30,7 @@ export default Vue.extend({
 
 <template>
   <div>
+    <h1>Список занятий</h1>
     <div class="box">
       <router-link tag="button" to="/couples/add" class="button is-primary mb-4">
         Добавить

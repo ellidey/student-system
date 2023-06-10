@@ -140,3 +140,42 @@ span + .material-icons {
   display: block;
   text-align: left;
 }
+
+.schedule__group-select {
+  border: none;
+  outline: none;
+  padding: 10px;
+  box-sizing: content-box;
+  background: transparent;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.schedule__select-form {
+  border: none;
+  color: #FFFFFF;
+  background-color: #0078d7;
+  max-height: 23px;
+  box-sizing: border-box;
+  outline: none;
+  width: 50px;
+}
+
+.file-input, .file, .file-label, .file-cta {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+  border: none !important;
+  transition: ease-in-out 0.2s;
+  max-height: 23px !important;
+
+  &:hover {
+    color: #Ffffff !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -9,12 +9,8 @@ export default Vue.extend({
   components: { DatePicker },
   data: function () {
     return {
-      couple: {
-        students: []
-      },
-      errors: {
-        students: {}
-      }
+      couple: { },
+      errors: { }
     }
   },
   computed: {
@@ -28,9 +24,7 @@ export default Vue.extend({
   methods: {
     ...mapMutations(['addCouple']),
     save() {
-      this.errors = {
-        students: {}
-      };
+      this.errors = { };
 
       if (!this.couple.name) {
         this.errors.name = 'Введите название пары';
@@ -44,22 +38,27 @@ export default Vue.extend({
         this.errors.group = 'Выберите группу';
       }
 
-      this.couple.students.forEach((student, index) => {
-        const studentErrors = {};
-        if (!student.student_id) {
-          studentErrors.student_id = 'Выберите студента';
-        }
+      // this.couple.students.forEach((student, index) => {
+      //   const studentErrors = {};
+      //   if (!student.student_id) {
+      //     studentErrors.student_id = 'Выберите студента';
+      //   }
+      //
+      //   if (!student.reason) {
+      //     studentErrors.reason = 'Укажите причину пропуска';
+      //   }
+      //
+      //   if (Object.keys(studentErrors).length > 0) {
+      //     this.errors.students[index] = studentErrors;
+      //   }
+      // });
+      //
+      // if (Object.keys(this.errors).length > 1 || Object.keys(this.errors.students).length > 0) {
+      //   return;
+      // }
 
-        if (!student.reason) {
-          studentErrors.reason = 'Укажите причину пропуска';
-        }
-
-        if (Object.keys(studentErrors).length > 0) {
-          this.errors.students[index] = studentErrors;
-        }
-      });
-
-      if (Object.keys(this.errors).length > 1 || Object.keys(this.errors.students).length > 0) {
+      if (Object.keys(this.errors).length > 0) {
+        console.log(this.errors);
         return;
       }
 
@@ -123,78 +122,78 @@ export default Vue.extend({
         </div>
       </div>
 
-      <div class="mb-5">
-        <span style="font-weight: bold">Студенты</span>
-        <div class="columns mt-3" v-for="(student, index) in couple.students" :key="index">
-          <div class="column">
-            <label class="label">Студент</label>
-            <div class="select is-small" style="width: 100%">
-              <select v-model="student.student_id" style="height: 35px;">
-                <option selected disabled value="">Выберите студента</option>
-                <option v-for="std in filteredStudents" :key="std.id" :value="std.id">
-                  {{ std.name }}
-                </option>
-              </select>
-            </div>
-            <p class="help is-danger"
-               v-if="errors.students[index]?.student_id">
-              {{ errors.students[index]?.student_id }}
-            </p>
-          </div>
+<!--      <div class="mb-5">-->
+<!--        <span style="font-weight: bold">Студенты</span>-->
+<!--        <div class="columns mt-3" v-for="(student, index) in couple.students" :key="index">-->
+<!--          <div class="column">-->
+<!--            <label class="label">Студент</label>-->
+<!--            <div class="select is-small" style="width: 100%">-->
+<!--              <select v-model="student.student_id" style="height: 35px;">-->
+<!--                <option selected disabled value="">Выберите студента</option>-->
+<!--                <option v-for="std in filteredStudents" :key="std.id" :value="std.id">-->
+<!--                  {{ std.name }}-->
+<!--                </option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <p class="help is-danger"-->
+<!--               v-if="errors.students[index]?.student_id">-->
+<!--              {{ errors.students[index]?.student_id }}-->
+<!--            </p>-->
+<!--          </div>-->
 
-          <div class="column">
-            <label class="label">Причина пропуска</label>
-            <input class="input" type="text" placeholder="Введите причину пропуска" v-model="student.reason">
-            <p class="help is-danger"
-               v-if="errors.students[index]?.reason">
-              {{ errors.students[index]?.reason }}
-            </p>
-          </div>
+<!--          <div class="column">-->
+<!--            <label class="label">Причина пропуска</label>-->
+<!--            <input class="input" type="text" placeholder="Введите причину пропуска" v-model="student.reason">-->
+<!--            <p class="help is-danger"-->
+<!--               v-if="errors.students[index]?.reason">-->
+<!--              {{ errors.students[index]?.reason }}-->
+<!--            </p>-->
+<!--          </div>-->
 
-          <div class="column">
-            <template v-if="student.file">
-              <button class="button is-warning"
-                      style="margin-top: 27px; height: 35px; width: 100%;"
-                      @click="delete student.file; $forceUpdate()">Удалить файл</button>
-            </template>
-            <template v-else>
-              <label class="label">Подтверждение пропуска</label>
-              <div class="file is-fullwidth">
-                <label class="file-label is-fullwidth">
-                  <input class="file-input is-fullwidth" type="file" accept="image/*" @change="onFileChange($event, student)">
-                  <span class="file-cta" style="width: 100%;">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label" style="justify-content: center">
-                  Выберите файл
-                </span>
-              </span>
-                </label>
-              </div>
-            </template>
-          </div>
-          <div>
-            <button class="button is-small is-danger"
-                    style="margin-top: 39px; height: 35px"
-                    @click="couple.students = couple.students.filter(std => {
-                       return std !== student;
-                    })">
-          <span class="icon is-small">
-            <i class="ri-delete-bin-2-fill"></i>
-          </span>
-            </button>
-          </div>
-        </div>
+<!--          <div class="column">-->
+<!--            <template v-if="student.file">-->
+<!--              <button class="button is-warning"-->
+<!--                      style="margin-top: 27px; height: 35px; width: 100%;"-->
+<!--                      @click="delete student.file; $forceUpdate()">Удалить файл</button>-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              <label class="label">Подтверждение пропуска</label>-->
+<!--              <div class="file is-fullwidth">-->
+<!--                <label class="file-label is-fullwidth">-->
+<!--                  <input class="file-input is-fullwidth" type="file" accept="image/*" @change="onFileChange($event, student)">-->
+<!--                  <span class="file-cta" style="width: 100%;">-->
+<!--                <span class="file-icon">-->
+<!--                  <i class="fas fa-upload"></i>-->
+<!--                </span>-->
+<!--                <span class="file-label" style="justify-content: center">-->
+<!--                  Выберите файл-->
+<!--                </span>-->
+<!--              </span>-->
+<!--                </label>-->
+<!--              </div>-->
+<!--            </template>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <button class="button is-small is-danger"-->
+<!--                    style="margin-top: 39px; height: 35px"-->
+<!--                    @click="couple.students = couple.students.filter(std => {-->
+<!--                       return std !== student;-->
+<!--                    })">-->
+<!--          <span class="icon is-small">-->
+<!--            <i class="ri-delete-bin-2-fill"></i>-->
+<!--          </span>-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="mt-3">
-          <button class="button is-small" @click="couple.students.push({})">
-          <span class="icon is-small">
-            <i class="ri-add-fill"></i>
-          </span>
-          </button>
-        </div>
-      </div>
+<!--        <div class="mt-3">-->
+<!--          <button class="button is-small" @click="couple.students.push({})">-->
+<!--          <span class="icon is-small">-->
+<!--            <i class="ri-add-fill"></i>-->
+<!--          </span>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <button class="button is-success" @click="save">Сохранить</button>
       <router-link tag="button" to="/couples" class="button is-danger">Отмена</router-link>
