@@ -14,6 +14,7 @@ import GroupEdit from '../views/groups/GroupEdit.vue'
 import CouplesIndex from '../views/couples/CouplesIndex.vue'
 import CouplesAdd from '../views/couples/CouplesAdd.vue'
 import CouplesEdit from '../views/couples/CouplesEdit.vue'
+import Report from '../views/Report.vue'
 
 Vue.use(Router)
 
@@ -102,6 +103,14 @@ const router = new Router({
         icon: 'fa-home',
       },
       component: CouplesEdit,
+    },
+    {
+      path: '/export',
+      meta: {
+        title: 'Отчет',
+        icon: 'fa-home',
+      },
+      component: Report,
     },
     {
       path: '/about',

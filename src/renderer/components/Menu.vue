@@ -35,25 +35,16 @@ export default Vue.extend({
         </router-link>
       </li>
       <li>
-        <router-link to="/couples">
+        <router-link to="/couples" :class="{ 'is-active': $route.path === '/couples' }">
           Пары
         </router-link>
       </li>
+      <li>
+        <router-link to="/export" :class="{ 'is-active': $route.path === '/export' }">
+          Отчет
+        </router-link>
+      </li>
     </ul>
-<!--    <ul class="menu-list">-->
-<!--      <li><a>Team Settings</a></li>-->
-<!--      <li>-->
-<!--        <a class="is-active">Manage Your Team</a>-->
-<!--        <ul>-->
-<!--          <li><a>Members</a></li>-->
-<!--          <li><a>Plugins</a></li>-->
-<!--          <li><a>Add a member</a></li>-->
-<!--        </ul>-->
-<!--      </li>-->
-<!--      <li><a>Invitations</a></li>-->
-<!--      <li><a>Cloud Storage Environment Settings</a></li>-->
-<!--      <li><a>Authentication</a></li>-->
-<!--    </ul>-->
   </aside>
 </template>
 
