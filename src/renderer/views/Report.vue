@@ -43,6 +43,12 @@ export default Vue.extend({
 
       const content = [];
       const skips = this.getSkipsByDate(this.date);
+      const all = {
+        total: 0,
+        b_skips: 0,
+        skips: 0,
+        bad_skips: 0,
+      };
 
 
       this.getStudentsByGroup(this.group_id).forEach((student, index) => {
@@ -56,11 +62,20 @@ export default Vue.extend({
             for (const key in skip[student.id]) {
               const status = skip[student.id][key]?.status || 0;
               if (status == 2) {
+                row.total_skips = (row.total_skips || 0) + 1;
                 row.b_skips = (row.b_skips || 0) + 1;
+                all.total += 1;
+                all.b_skips += 1;
               } else if (status == 3) {
+                row.total_skips = (row.total_skips || 0) + 1;
                 row.skips = (row.skips || 0) + 1;
+                all.total += 1;
+                all.skips += 1;
               } else if (status == 4) {
+                row.total_skips = (row.total_skips || 0) + 1;
                 row.bad_skips = (row.bad_skips || 0) + 1;
+                all.total += 1;
+                all.bad_skips += 1;
               }
             }
           }
@@ -69,6 +84,13 @@ export default Vue.extend({
         content.push(row);
       });
 
+      content.push({
+        student: 'Всего',
+        total_skips: all.total,
+        b_skips: all.b_skips,
+        skips: all.skips,
+        bad_skips: all.bad_skips,
+      });
 
       const data = [
         {
@@ -91,9 +113,8 @@ export default Vue.extend({
         },
       }
 
-      console.log(data);
       const result = xlsx(data, settings);
-      this.saveByteArray('test', result);
+      this.saveByteArray('Отчет по посещаемости', result);
     },
     getStudentsByGroup(group_id) {
       return this.getStudents.filter(student => {
@@ -112,7 +133,6 @@ export default Vue.extend({
           parseInt(parts[0], 10));
 
 
-        // console.log(dateStart, dateEnd, timestamp);
         if (timestamp > dateEnd || timestamp < dateStart) {
           continue;
         }
